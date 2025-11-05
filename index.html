@@ -1,263 +1,351 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="es">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Fiesta</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#667eea">
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-<head>
-    <meta charset="utf-8">
-    <title>publisolum</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      margin: 20px;
+    }
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
+    .header h1 {
+      color: #667eea;
+      font-size: 32px;
+      margin: 0 0 10px 0;
+    }
 
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    .header p {
+      color: #666;
+      font-size: 16px;
+      margin: 0;
+    }
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    .form-group {
+      margin-bottom: 20px;
+    }
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
-</head>
+    .form-group label {
+      display: block;
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
 
-<body style="background-color:#000000;">
-    
-    <div class="container-fluid mb-3">
-        <div class="row px-xl-5">
-            <div class="col-lg-8">
-                <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
-                    
-                    <div class="carousel-inner">
-                        <div class="carousel-item position-relative active" style="height: 430px;">
-                            <img class="position-absolute w-100 h-100" src="img/logoleidy.png" style="object-fit: cover;">
-                            
-                        </div>
-                        <div class="carousel-item position-relative" style="height: 430px;">
-                            <img class="position-absolute w-100 h-100" src="img/leidy2.jpeg" style="object-fit: cover;">
-                            
-                        </div>
-                        <div class="carousel-item position-relative" style="height: 430px;">
-                            <img class="position-absolute w-100 h-100" src="img/leidy1.jpeg" style="object-fit: cover;">
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn-register {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-register:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-register:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .stats {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stats h3 {
+      color: #667eea;
+      font-size: 20px;
+      margin: 0 0 15px 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: bold;
+      color: #667eea;
+      margin: 0;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+      margin: 5px 0 0 0;
+    }
+
+    .guest-list {
+      margin-top: 30px;
+    }
+
+    .guest-list h3 {
+      color: #667eea;
+      font-size: 20px;
+      margin: 0 0 15px 0;
+    }
+
+    .guest-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .guest-info {
+      flex: 1;
+    }
+
+    .guest-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 16px;
+      margin: 0 0 5px 0;
+    }
+
+    .guest-time {
+      font-size: 12px;
+      color: #999;
+      margin: 0;
+    }
+
+    .success-message {
+      background: #4caf50;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .error-message {
+      background: #f44336;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    .no-guests {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 20px;
+    }
+
+    .delete-btn {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.3s;
+    }
+
+    .delete-btn:hover {
+      background: #d32f2f;
+    }
+
+    .export-section {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .btn-export {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 0 5px;
+      transition: background 0.3s;
+    }
+
+    .btn-export:hover {
+      background: #45a049;
+    }
+
+    .config-section {
+      background: #f8f9fa;
+      border: 2px dashed #667eea;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      display: none;
+    }
+
+    .config-section.show {
+      display: block;
+    }
+
+    .config-section h3 {
+      color: #667eea;
+      font-size: 18px;
+      margin: 0 0 15px 0;
+    }
+
+    .btn-config {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px;
+      transition: background 0.3s;
+    }
+
+    .btn-config:hover {
+      background: #5568d3;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <h1>🎉 Registro de Fiesta</h1>
+    <p>¡Bienvenido a nuestra fiesta!</p>
+   </div>
+   <div id="config-section" class="config-section">
+    <h3>⚙️ Configuración Inicial</h3>
+    <p>Configura Firebase para sincronizar datos entre dispositivos:</p><button class="btn-config" onclick="loadFirebaseConfig()">📁 Cargar Configuración</button> <button class="btn-config" onclick="initOfflineMode()">💾 Modo Sin Conexión</button>
+   </div>
+   <div id="success-message" class="success-message">
+    ✓ ¡Registro exitoso!
+   </div>
+   <div id="error-message" class="error-message">
+    ✗ Error al registrar. Intenta nuevamente.
+   </div>
+   <form id="registration-form">
+    <div class="form-group"><label for="name">Nombre Completo</label> <input type="text" id="name" required placeholder="Juan Pérez">
     </div>
-    <!-- Carousel End -->
-
-
-    <!-- Featured Start -->
-    <div class="container-fluid pt-5" style="background-color:#000000;" >
-       
-            
-			
-                
-                    			                  
-                                                   <a href="https://api.whatsapp.com/send?phone=580424-7286723&text=Hola, escribo desde el perfil digital " target="_blank">
-												   <button style="background-color:#000000;" class="btn btn-block btn-primary1 font-weight-bold my-3 ">  <!-- py es la altura del relleno  my margem frontblod tipo de letra -->
-                                                  ​     <h4 style="color:#e2c15c" align="left">  <img src="img/icowapp.png" width="80" height="80">
-												        Escribe a nuestro Whatsapp </h4> 
-													</button>
-                                                   </a> 
-											      <a href="https://www.instagram.com/leidycva/" target="_blank">
-												   <button style="background-color:#000000;" class="btn btn-block btn-primary1 font-weight-bold my-3 py-3">  <!-- py es la altura del relleno  my margem frontblod tipo de letra -->
-                                                  ​     <h4 align="left" style="color:#e2c15c">  <img src="img/icoinstegram.png" width="80" height="80">
-												        siguenos en instegram </h4> 
-													</button>
-                                                   </a> 
-                                                   <a href="https://www.facebook.com/estiloshaircolors.peluqueria" target="_blank">
-												   <button style="background-color:#000000;" class="btn btn-block btn-primary1 font-weight-bold my-3 py-3">  <!-- py es la altura del relleno  my margem frontblod tipo de letra -->
-                                                  ​     <h4 align="left" style="color:#e2c15c">  <img src="img/icofacebook.png" width="80" height="80">
-												        visita nuestro facebook </h4> 
-													</button>
-                                                   </a> 
-                                                   <a href="tel:+2742510349" target="_blank">
-												   <button style="background-color:#000000;" class="btn btn-block btn-primary1 font-weight-bold my-3 py-3">  <!-- py es la altura del relleno  my margem frontblod tipo de letra -->
-                                                  ​     <h4 align="left" style="color:#e2c15c">  <img src="img/icotelefono.png" width="80" height="80">
-												        llamar a nuestro telefono fijo </h4> 
-													</button>
-                                                   </a> 
-            
-                
-           
-			
-                    
-			
-			
-       
+    <div class="form-group"><label for="phone">Teléfono</label> <input type="tel" id="phone" placeholder="+57 300 123 4567">
     </div>
-    <!-- Featured End -->
-	
-	<div class="container-fluid pt-5 pb-3">
-        <h2 style="color:#e2c15c" class=" position-relative text-uppercase mx-xl-5 mb-4">Ubicanos:</h2>
-		<h4 style="color:#e2c15c" > Lady Estilos, calle 26 entre av 4 y 5 edifico la 26 primer piso local 1-5</h4>
-<div class="col-lg-5 mb-5">
-                <div class="bg-light p-30 mb-30">
-                    <iframe style="width: 100%; height: 250px;"
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d293.2147468455131!2d-71.14624961509207!3d8.594875169338255!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sbd!4v1717112855051!5m2!1sen!2sbd"
-                    frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-                </div>
-                
-            </div>
-			 </div>
-
-    <!-- Categories Start -->
-    
-    <!-- Categories End -->
-
-
-    <!-- Products Start -->
-    <div class="container-fluid pt-5 pb-3">
-        <h2 style="color:#e2c15c" class=" position-relative text-uppercase mx-xl-5 mb-4">catalago de producto</h2>
-        <div class="row px-xl-5">
-            
-			            <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                <div class="product-item bg-light mb-4">
-                    <div class="product-img position-relative overflow-hidden">
-                        <img class="img-fluid w-100" src="img/product-8.jpg" alt="">
-                        <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">espacio para produccto</a>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>precio</h5>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-			
-			
-            <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                <div class="product-item bg-light mb-4">
-                    <div class="product-img position-relative overflow-hidden">
-                        <img class="img-fluid w-100" src="img/product-8.jpg" alt="">
-                        <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">espacio para produccto</a>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>precio</h5>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="form-group"><label for="guests">Número de Acompañantes</label> <input type="number" id="guests" min="0" value="0">
+    </div><button type="submit" class="btn-register" id="submit-btn"> Registrar Entrada </button>
+   </form>
+   <div class="stats">
+    <h3>📊 Estadísticas en Tiempo Real</h3>
+    <div class="stats-grid">
+     <div class="stat-card">
+      <p class="stat-number" id="total-guests">0</p>
+      <p class="stat-label">Total Invitados</p>
+     </div>
+     <div class="stat-card">
+      <p class="stat-number" id="total-companions">0</p>
+      <p class="stat-label">Acompañantes</p>
+     </div>
     </div>
-    <!-- Products End -->
-
-
-    <!-- Offer Start -->
-    
-    <!-- Offer End -->
-	<div class="container-fluid pt-5 pb-3">
-        <h2 style="color:#e2c15c" class=" position-relative text-uppercase mx-xl-5 mb-4">otros sitios de interes en MERIDA</span></h2> 
-<a href="trabajando.html">
-  <!-- LOGOS Q SE MUEVEN  -->
-    <div class="container-fluid py-2">
-        <div class="row px-xl-2">
-            <div class="col">
-                <div class="owl-carousel vendor-carousel">
-				    <div class="bg-light p-4">
-                        <img src="img/1.png" alt="">
-					</div>
-				    <div class="bg-light p-4">
-                        <img src="img/2.png" alt="">
-					</div>	
-				    <div class="bg-light p-4">
-                        <img src="img/3.png" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="img/4.png" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="img/5.png" alt="">
-                    </div>
-					<div class="bg-light p-4">
-                        <img src="img/6.png" alt="">
-                    </div>
-                    <div class="bg-light p-4">
-                        <img src="img/7.jpg" alt="">
-                    </div>
-					<div class="bg-light p-4">
-                        <img src="img/8.jpg" alt="">
-                    </div>
-					<div class="bg-light p-4">
-                        <img src="img/9.png" alt="">
-                    </div>	
-                  
-                </div>
-            </div>
-        </div>
+   </div>
+   <div class="export-section"><button class="btn-export" onclick="exportToCSV()">📊 Exportar CSV</button> <button class="btn-export" onclick="clearAllData()">🗑️ Limpiar Todo</button> <button class="btn-export" onclick="showConfig()">⚙️ Configurar</button>
+   </div>
+   <div class="guest-list">
+    <h3>👥 Lista de Registros</h3>
+    <div id="guest-list-container">
+     <div class="no-guests">
+      No hay registros aún
+     </div>
     </div>
-    <!-- Vendor End -->
-</a>
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-secondary mt-1 pt-1">
-        <div class="row px-xl-5 pt-5">
-            <div class="col-lg-4 col-md-1 mb-1 pr-3 pr-xl-5">
-                
-                
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>MERIDA - VENEZUELA</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>PUBLISOLUM@GMAIL.com</p>        
-    </div>
-    <!-- Footer End -->
-
-
-    <!-- Back to Top -->
-    
-
-    <!-- Products Start -->
-    
-    <!-- Products End -->
-
-
-    <!-- Vendor Start -->
-    
-    <!-- Vendor End -->
-
-
-    <!-- Footer Start -->
-    
-    <!-- Footer End -->
-
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-    <!-- Contact Javascript File -->
-    <script src="mail/jqBootstrapValidation.min.js"></script>
-    <script src="mail/contact.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
-</body>
-
+   </div>
+  </div>
+  <script type="module" src="./js/app.js"></script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'999ebeb8b6b2ecc9',t:'MTc2MjM3MDgwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
