@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="es">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Fiesta</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#667eea">
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      margin: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: #667eea;
+      font-size: 32px;
+      margin: 0 0 10px 0;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 16px;
+      margin: 0;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn-register {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-register:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-register:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .stats {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stats h3 {
+      color: #667eea;
+      font-size: 20px;
+      margin: 0 0 15px 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: bold;
+      color: #667eea;
+      margin: 0;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+      margin: 5px 0 0 0;
+    }
+
+    .guest-list {
+      margin-top: 30px;
+    }
+
+    .guest-list h3 {
+      color: #667eea;
+      font-size: 20px;
+      margin: 0 0 15px 0;
+    }
+
+    .guest-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .guest-info {
+      flex: 1;
+    }
+
+    .guest-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 16px;
+      margin: 0 0 5px 0;
+    }
+
+    .guest-time {
+      font-size: 12px;
+      color: #999;
+      margin: 0;
+    }
+
+    .success-message {
+      background: #4caf50;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .error-message {
+      background: #f44336;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    .no-guests {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 20px;
+    }
+
+    .delete-btn {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.3s;
+    }
+
+    .delete-btn:hover {
+      background: #d32f2f;
+    }
+
+    .export-section {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .btn-export {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 0 5px;
+      transition: background 0.3s;
+    }
+
+    .btn-export:hover {
+      background: #45a049;
+    }
+
+    .config-section {
+      background: #f8f9fa;
+      border: 2px dashed #667eea;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      display: none;
+    }
+
+    .config-section.show {
+      display: block;
+    }
+
+    .config-section h3 {
+      color: #667eea;
+      font-size: 18px;
+      margin: 0 0 15px 0;
+    }
+
+    .btn-config {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px;
+      transition: background 0.3s;
+    }
+
+    .btn-config:hover {
+      background: #5568d3;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <h1>🎉 Registro de Fiesta</h1>
+    <p>¡Bienvenido a nuestra fiesta!</p>
+   </div>
+   <div id="config-section" class="config-section">
+    <h3>⚙️ Configuración Inicial</h3>
+    <p>Configura Firebase para sincronizar datos entre dispositivos:</p><button class="btn-config" onclick="loadFirebaseConfig()">📁 Cargar Configuración</button> <button class="btn-config" onclick="initOfflineMode()">💾 Modo Sin Conexión</button>
+   </div>
+   <div id="success-message" class="success-message">
+    ✓ ¡Registro exitoso!
+   </div>
+   <div id="error-message" class="error-message">
+    ✗ Error al registrar. Intenta nuevamente.
+   </div>
+   <form id="registration-form">
+    <div class="form-group"><label for="name">Nombre Completo</label> <input type="text" id="name" required placeholder="Juan Pérez">
+    </div>
+    <div class="form-group"><label for="phone">Teléfono</label> <input type="tel" id="phone" placeholder="+57 300 123 4567">
+    </div>
+    <div class="form-group"><label for="guests">Número de Acompañantes</label> <input type="number" id="guests" min="0" value="0">
+    </div><button type="submit" class="btn-register" id="submit-btn"> Registrar Entrada </button>
+   </form>
+   <div class="stats">
+    <h3>📊 Estadísticas en Tiempo Real</h3>
+    <div class="stats-grid">
+     <div class="stat-card">
+      <p class="stat-number" id="total-guests">0</p>
+      <p class="stat-label">Total Invitados</p>
+     </div>
+     <div class="stat-card">
+      <p class="stat-number" id="total-companions">0</p>
+      <p class="stat-label">Acompañantes</p>
+     </div>
+    </div>
+   </div>
+   <div class="export-section"><button class="btn-export" onclick="exportToCSV()">📊 Exportar CSV</button> <button class="btn-export" onclick="clearAllData()">🗑️ Limpiar Todo</button> <button class="btn-export" onclick="showConfig()">⚙️ Configurar</button>
+   </div>
+   <div class="guest-list">
+    <h3>👥 Lista de Registros</h3>
+    <div id="guest-list-container">
+     <div class="no-guests">
+      No hay registros aún
+     </div>
+    </div>
+   </div>
+  </div>
+  <script type="module" src="./js/app.js"></script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'999ebeb8b6b2ecc9',t:'MTc2MjM3MDgwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

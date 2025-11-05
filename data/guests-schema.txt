@@ -1,0 +1,56 @@
+{
+  "schema": {
+    "collection": "guests",
+    "fields": {
+      "id": {
+        "type": "string",
+        "required": true,
+        "description": "Identificador único del registro"
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Nombre completo del invitado"
+      },
+      "phone": {
+        "type": "string",
+        "required": false,
+        "description": "Número de teléfono del invitado"
+      },
+      "companions": {
+        "type": "number",
+        "required": true,
+        "default": 0,
+        "description": "Número de acompañantes"
+      },
+      "timestamp": {
+        "type": "string",
+        "required": true,
+        "description": "Fecha y hora en formato ISO"
+      },
+      "entryTime": {
+        "type": "string",
+        "required": true,
+        "description": "Fecha y hora formateada para mostrar"
+      }
+    }
+  },
+  "sampleData": [
+    {
+      "id": "1703123456789",
+      "name": "Juan Pérez",
+      "phone": "+57 300 123 4567",
+      "companions": 2,
+      "timestamp": "2024-01-01T20:00:00.000Z",
+      "entryTime": "1/1/2024 8:00:00 PM"
+    },
+    {
+      "id": "1703123456790",
+      "name": "María García",
+      "phone": "+57 301 987 6543",
+      "companions": 1,
+      "timestamp": "2024-01-01T20:15:00.000Z",
+      "entryTime": "1/1/2024 8:15:00 PM"
+    }
+  ]
+}
