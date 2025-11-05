@@ -3,9 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro de Fiesta</title>
-  <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#667eea">
+  <title>Registro de Fiesta - Firebase</title>
   <style>
     body {
       box-sizing: border-box;
@@ -44,6 +42,29 @@
       color: #666;
       font-size: 16px;
       margin: 0;
+    }
+
+    .connection-status {
+      background: #e8f5e8;
+      border: 1px solid #4caf50;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #2e7d32;
+    }
+
+    .connection-status.offline {
+      background: #fff3cd;
+      border-color: #ffc107;
+      color: #856404;
+    }
+
+    .connection-status.error {
+      background: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
     }
 
     .form-group {
@@ -292,6 +313,39 @@
     .btn-config:hover {
       background: #5568d3;
     }
+
+    .firebase-config {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+
+    .firebase-config textarea {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: monospace;
+      font-size: 12px;
+      box-sizing: border-box;
+    }
+
+    .github-info {
+      background: #e3f2fd;
+      border: 1px solid #2196f3;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .github-info h4 {
+      color: #1976d2;
+      margin: 0 0 10px 0;
+    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
@@ -304,9 +358,34 @@
     <h1>🎉 Registro de Fiesta</h1>
     <p>¡Bienvenido a nuestra fiesta!</p>
    </div>
+   <div id="connection-status" class="connection-status">
+    🔄 Conectando con Firebase...
+   </div>
    <div id="config-section" class="config-section">
-    <h3>⚙️ Configuración Inicial</h3>
-    <p>Configura Firebase para sincronizar datos entre dispositivos:</p><button class="btn-config" onclick="loadFirebaseConfig()">📁 Cargar Configuración</button> <button class="btn-config" onclick="initOfflineMode()">💾 Modo Sin Conexión</button>
+    <h3>🔥 Configuración Firebase</h3>
+    <div class="github-info">
+     <h4>📋 Instrucciones para GitHub Pages:</h4>
+     <ol style="margin: 10px 0; padding-left: 20px;">
+      <li>Sube este archivo como <code>index.html</code> a tu repositorio</li>
+      <li>Activa GitHub Pages en Settings → Pages</li>
+      <li>Configura Firebase abajo y ¡listo!</li>
+     </ol>
+    </div>
+    <div class="firebase-config"><label for="firebase-config">Configuración Firebase:</label>
+     <p style="font-size: 12px; color: #666; margin: 5px 0;">1. Ve a <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a><br>
+       2. Crea/selecciona tu proyecto<br>
+       3. Activa Firestore Database<br>
+       4. Copia la configuración web aquí:</p><textarea id="firebase-config" placeholder="Pega aquí tu configuración de Firebase:
+
+{
+  &quot;apiKey&quot;: &quot;AIzaSyC...&quot;,
+  &quot;authDomain&quot;: &quot;tu-proyecto.firebaseapp.com&quot;,
+  &quot;projectId&quot;: &quot;tu-proyecto-id&quot;,
+  &quot;storageBucket&quot;: &quot;tu-proyecto.appspot.com&quot;,
+  &quot;messagingSenderId&quot;: &quot;123456789&quot;,
+  &quot;appId&quot;: &quot;1:123456789:web:abc123&quot;
+}"></textarea>
+    </div><button class="btn-config" onclick="saveFirebaseConfig()">🔥 Conectar Firebase</button> <button class="btn-config" onclick="testConnection()">🧪 Probar Conexión</button> <button class="btn-config" onclick="useOfflineMode()">📱 Modo Offline</button>
    </div>
    <div id="success-message" class="success-message">
     ✓ ¡Registro exitoso!
@@ -335,17 +414,448 @@
      </div>
     </div>
    </div>
-   <div class="export-section"><button class="btn-export" onclick="exportToCSV()">📊 Exportar CSV</button> <button class="btn-export" onclick="clearAllData()">🗑️ Limpiar Todo</button> <button class="btn-export" onclick="showConfig()">⚙️ Configurar</button>
+   <div class="export-section"><button class="btn-export" onclick="exportToCSV()">📊 Exportar CSV</button> <button class="btn-export" onclick="exportToJSON()">💾 Respaldar JSON</button> <button class="btn-export" onclick="clearAllData()">🗑️ Limpiar Todo</button> <button class="btn-export" onclick="showConfig()">⚙️ Configurar</button>
    </div>
    <div class="guest-list">
-    <h3>👥 Lista de Registros</h3>
+    <h3>👥 Lista de Registros (Últimos 10)</h3>
     <div id="guest-list-container">
      <div class="no-guests">
       No hay registros aún
      </div>
     </div>
    </div>
-  </div>
-  <script type="module" src="./js/app.js"></script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'999ebeb8b6b2ecc9',t:'MTc2MjM3MDgwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  </div><!-- Firebase SDK -->
+  <script type="module">
+    // Importar Firebase
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      getDocs, 
+      deleteDoc, 
+      doc, 
+      query, 
+      orderBy, 
+      onSnapshot,
+      serverTimestamp 
+    } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    // Variables globales
+    let currentGuests = [];
+    let isFirebaseConnected = false;
+    let db = null;
+    let app = null;
+    let unsubscribe = null;
+
+    // Configuración por defecto (puedes cambiar estos valores)
+    const DEFAULT_CONFIG = {
+      apiKey: "AIzaSyBdVl-cO_MQeXVWBINTd4sJaT-2mhSmsNI",
+      authDomain: "registro-fiesta-demo.firebaseapp.com",
+      projectId: "registro-fiesta-demo",
+      storageBucket: "registro-fiesta-demo.appspot.com",
+      messagingSenderId: "987654321012",
+      appId: "1:987654321012:web:abc123def456789ghi"
+    };
+
+    // Función para actualizar estado de conexión
+    function updateConnectionStatus(status, message, isError = false) {
+      const statusEl = document.getElementById('connection-status');
+      statusEl.textContent = message;
+      statusEl.className = `connection-status ${status}`;
+    }
+
+    // Inicializar Firebase
+    async function initFirebase(config = null) {
+      try {
+        updateConnectionStatus('connecting', '🔄 Conectando con Firebase...');
+        
+        const firebaseConfig = config || JSON.parse(localStorage.getItem('firebaseConfig')) || DEFAULT_CONFIG;
+        
+        // Inicializar Firebase
+        app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        
+        // Probar conexión escribiendo y leyendo
+        await testFirebaseConnection();
+        
+        // Configurar listener en tiempo real
+        const q = query(collection(db, 'guests'), orderBy('timestamp', 'desc'));
+        unsubscribe = onSnapshot(q, (snapshot) => {
+          currentGuests = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          updateUI();
+        }, (error) => {
+          console.error('Error en listener:', error);
+          updateConnectionStatus('error', '❌ Error de sincronización - Usando datos locales');
+          loadLocalData();
+        });
+
+        isFirebaseConnected = true;
+        updateConnectionStatus('online', '🔥 Conectado a Firebase - Sincronización activa');
+        
+        // Guardar configuración
+        if (config) {
+          localStorage.setItem('firebaseConfig', JSON.stringify(firebaseConfig));
+          localStorage.setItem('appConfigured', 'true');
+        }
+        
+        return true;
+      } catch (error) {
+        console.error('Error conectando Firebase:', error);
+        updateConnectionStatus('error', '❌ Error de conexión - Usando modo offline');
+        loadLocalData();
+        return false;
+      }
+    }
+
+    // Probar conexión Firebase
+    async function testFirebaseConnection() {
+      const testDoc = {
+        test: true,
+        timestamp: serverTimestamp()
+      };
+      
+      // Intentar escribir un documento de prueba
+      const docRef = await addDoc(collection(db, 'connection_test'), testDoc);
+      
+      // Intentar leerlo
+      await getDocs(collection(db, 'connection_test'));
+      
+      // Eliminar documento de prueba
+      await deleteDoc(doc(db, 'connection_test', docRef.id));
+    }
+
+    // Cargar datos locales
+    function loadLocalData() {
+      currentGuests = JSON.parse(localStorage.getItem('partyGuests') || '[]');
+      updateUI();
+    }
+
+    // Guardar datos locales
+    function saveLocalData() {
+      localStorage.setItem('partyGuests', JSON.stringify(currentGuests));
+    }
+
+    // Registrar invitado
+    async function registerGuest() {
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Registrando...';
+
+      try {
+        const now = new Date();
+        const guestData = {
+          name: document.getElementById('name').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          companions: parseInt(document.getElementById('guests').value) || 0,
+          timestamp: serverTimestamp(),
+          entryTime: now.toLocaleString('es-ES'),
+          registrationNumber: currentGuests.length + 1
+        };
+
+        if (isFirebaseConnected && db) {
+          // Guardar en Firebase
+          await addDoc(collection(db, 'guests'), guestData);
+          showSuccess('✅ ¡Registro guardado en Firebase!');
+        } else {
+          // Guardar localmente
+          guestData.id = Date.now().toString();
+          guestData.timestamp = now.toISOString();
+          currentGuests.unshift(guestData);
+          saveLocalData();
+          updateUI();
+          showSuccess('✅ ¡Registro guardado localmente!');
+        }
+
+        document.getElementById('registration-form').reset();
+      } catch (error) {
+        console.error('Error registering guest:', error);
+        showError('❌ Error al registrar. Intenta nuevamente.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Registrar Entrada';
+      }
+    }
+
+    // Eliminar invitado
+    async function deleteGuest(guestId) {
+      try {
+        if (isFirebaseConnected && db) {
+          await deleteDoc(doc(db, 'guests', guestId));
+          showSuccess('🗑️ Registro eliminado de Firebase');
+        } else {
+          currentGuests = currentGuests.filter(guest => guest.id !== guestId);
+          saveLocalData();
+          updateUI();
+          showSuccess('🗑️ Registro eliminado localmente');
+        }
+      } catch (error) {
+        console.error('Error deleting guest:', error);
+        showError('❌ Error al eliminar registro');
+      }
+    }
+
+    // Actualizar interfaz
+    function updateUI() {
+      const totalGuests = currentGuests.length;
+      const totalCompanions = currentGuests.reduce((sum, guest) => sum + (guest.companions || 0), 0);
+      
+      document.getElementById('total-guests').textContent = totalGuests;
+      document.getElementById('total-companions').textContent = totalCompanions;
+
+      const container = document.getElementById('guest-list-container');
+      
+      if (currentGuests.length === 0) {
+        container.innerHTML = '<div class="no-guests">No hay registros aún</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      
+      // Mostrar últimos 10 registros
+      const recentGuests = currentGuests.slice(0, 10);
+
+      recentGuests.forEach((guest) => {
+        const guestItem = document.createElement('div');
+        guestItem.className = 'guest-item';
+        
+        guestItem.innerHTML = `
+          <div class="guest-info">
+            <p class="guest-name">${guest.name}</p>
+            <p class="guest-time">${guest.entryTime} • ${guest.companions || 0} acompañantes</p>
+          </div>
+          <button class="delete-btn" onclick="window.deleteGuest('${guest.id}')">Eliminar</button>
+        `;
+        
+        container.appendChild(guestItem);
+      });
+    }
+
+    // Funciones de mensajes
+    function showSuccess(message) {
+      const successMsg = document.getElementById('success-message');
+      successMsg.textContent = message;
+      successMsg.classList.add('show');
+      setTimeout(() => successMsg.classList.remove('show'), 3000);
+    }
+
+    function showError(message) {
+      const errorMsg = document.getElementById('error-message');
+      errorMsg.textContent = message;
+      errorMsg.classList.add('show');
+      setTimeout(() => errorMsg.classList.remove('show'), 3000);
+    }
+
+    // Guardar configuración Firebase
+    async function saveFirebaseConfig() {
+      const configText = document.getElementById('firebase-config').value.trim();
+      if (!configText) {
+        showError('Por favor ingresa la configuración de Firebase');
+        return;
+      }
+
+      try {
+        let config;
+        
+        // Extraer JSON de diferentes formatos
+        if (configText.includes('const firebaseConfig')) {
+          const match = configText.match(/const\s+firebaseConfig\s*=\s*({[\s\S]*?});?/);
+          if (match) {
+            config = JSON.parse(match[1]);
+          }
+        } else if (configText.startsWith('{')) {
+          config = JSON.parse(configText);
+        } else {
+          const jsonMatch = configText.match(/{[\s\S]*}/);
+          if (jsonMatch) {
+            config = JSON.parse(jsonMatch[0]);
+          }
+        }
+
+        if (!config || !config.apiKey || !config.projectId) {
+          throw new Error('Configuración incompleta');
+        }
+
+        showSuccess('⏳ Conectando con Firebase...');
+        document.getElementById('config-section').classList.remove('show');
+        
+        const success = await initFirebase(config);
+        if (success) {
+          showSuccess('🔥 ¡Conectado exitosamente a Firebase!');
+        }
+      } catch (error) {
+        showError(`❌ Error: ${error.message}`);
+      }
+    }
+
+    // Probar conexión
+    async function testConnection() {
+      if (!isFirebaseConnected) {
+        showError('❌ No hay conexión activa con Firebase');
+        return;
+      }
+
+      try {
+        updateConnectionStatus('connecting', '🧪 Probando conexión...');
+        await testFirebaseConnection();
+        updateConnectionStatus('online', '✅ Conexión exitosa - Firebase funcionando');
+        showSuccess('🧪 ¡Conexión probada exitosamente!');
+      } catch (error) {
+        updateConnectionStatus('error', '❌ Error en prueba de conexión');
+        showError('❌ Error al probar conexión');
+      }
+    }
+
+    // Modo offline
+    function useOfflineMode() {
+      localStorage.setItem('appConfigured', 'true');
+      document.getElementById('config-section').classList.remove('show');
+      updateConnectionStatus('offline', '📱 Modo offline - Datos guardados localmente');
+      loadLocalData();
+      showSuccess('📱 Configurado en modo offline');
+    }
+
+    // Exportar a CSV
+    function exportToCSV() {
+      if (currentGuests.length === 0) {
+        showError('No hay datos para exportar');
+        return;
+      }
+
+      const headers = ['Nombre', 'Teléfono', 'Acompañantes', 'Fecha y Hora'];
+      const csvContent = [
+        headers.join(','),
+        ...currentGuests.map(guest => [
+          `"${guest.name}"`,
+          `"${guest.phone || ''}"`,
+          guest.companions || 0,
+          `"${guest.entryTime}"`
+        ].join(','))
+      ].join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `registro_fiesta_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      showSuccess('📊 Archivo CSV descargado');
+    }
+
+    // Exportar a JSON
+    function exportToJSON() {
+      if (currentGuests.length === 0) {
+        showError('No hay datos para exportar');
+        return;
+      }
+
+      const backup = {
+        data: currentGuests,
+        timestamp: new Date().toISOString(),
+        totalRecords: currentGuests.length,
+        source: isFirebaseConnected ? 'firebase' : 'local'
+      };
+
+      const dataStr = JSON.stringify(backup, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `registro_fiesta_backup_${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+      
+      showSuccess('💾 Respaldo JSON descargado');
+    }
+
+    // Limpiar todos los datos
+    async function clearAllData() {
+      if (currentGuests.length === 0) {
+        showError('No hay datos para eliminar');
+        return;
+      }
+
+      const container = document.getElementById('guest-list-container');
+      const confirmDiv = document.createElement('div');
+      confirmDiv.style.cssText = 'background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 15px;';
+      confirmDiv.innerHTML = `
+        <p style="margin: 0 0 10px 0; color: #856404;">⚠️ ¿Estás seguro de eliminar TODOS los registros?</p>
+        <button onclick="window.confirmClearAll()" style="background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; margin: 0 5px; cursor: pointer;">Sí, eliminar todo</button>
+        <button onclick="window.cancelClearAll()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 5px; margin: 0 5px; cursor: pointer;">Cancelar</button>
+      `;
+      
+      container.insertBefore(confirmDiv, container.firstChild);
+    }
+
+    // Confirmar limpiar todo
+    async function confirmClearAll() {
+      try {
+        if (isFirebaseConnected && db) {
+          const snapshot = await getDocs(collection(db, 'guests'));
+          for (const docSnap of snapshot.docs) {
+            await deleteDoc(doc(db, 'guests', docSnap.id));
+          }
+          showSuccess('🗑️ Todos los registros eliminados de Firebase');
+        } else {
+          currentGuests = [];
+          saveLocalData();
+          updateUI();
+          showSuccess('🗑️ Todos los registros eliminados localmente');
+        }
+      } catch (error) {
+        showError('❌ Error al eliminar registros');
+      }
+      cancelClearAll();
+    }
+
+    // Cancelar limpiar
+    function cancelClearAll() {
+      const confirmDiv = document.querySelector('#guest-list-container > div');
+      if (confirmDiv && confirmDiv.innerHTML.includes('¿Estás seguro')) {
+        confirmDiv.remove();
+      }
+    }
+
+    // Mostrar configuración
+    function showConfig() {
+      document.getElementById('config-section').classList.add('show');
+    }
+
+    // Exponer funciones globales
+    window.registerGuest = registerGuest;
+    window.deleteGuest = deleteGuest;
+    window.saveFirebaseConfig = saveFirebaseConfig;
+    window.testConnection = testConnection;
+    window.useOfflineMode = useOfflineMode;
+    window.exportToCSV = exportToCSV;
+    window.exportToJSON = exportToJSON;
+    window.clearAllData = clearAllData;
+    window.confirmClearAll = confirmClearAll;
+    window.cancelClearAll = cancelClearAll;
+    window.showConfig = showConfig;
+
+    // Inicializar aplicación
+    document.addEventListener('DOMContentLoaded', async () => {
+      document.getElementById('registration-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        registerGuest();
+      });
+
+      // Auto-inicializar si ya está configurado
+      if (localStorage.getItem('appConfigured')) {
+        await initFirebase();
+      } else {
+        document.getElementById('config-section').classList.add('show');
+        updateConnectionStatus('offline', '⚙️ Configuración requerida');
+      }
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'999f63f126f7a4c8',t:'MTc2MjM3NzU3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
